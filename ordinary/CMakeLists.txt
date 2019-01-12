@@ -6,9 +6,9 @@ set(EXECUTABLE_OUTPUT_PATH "..")
 set(CMAKE_BUILD TYPE Debug)
 
 # OpenCV stuff
-#find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
-add_executable(gaussian_ordinary main.cpp)
+add_executable(gaussian_ordinary main.cpp gaussian.hpp gaussian.cpp)
 
-#target_link_libraries(haar2d ${OpenCV_LIBS})
+target_link_libraries(gaussian_ordinary ${OpenCV_LIBS})
 
