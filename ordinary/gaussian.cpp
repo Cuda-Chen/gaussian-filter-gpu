@@ -38,8 +38,8 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 
 	generateKernel(kernelWidth, kernelHeight, sigma, kernel);
 
-	int strideWidth = width / 2;
-	int strideHeight = height / 2;
+	int strideWidth = kernelWidth / 2;
+	int strideHeight = kernelHeight / 2;
 
 	for(int row = 0 + strideHeight; row < height - strideHeight; row++)
 	{

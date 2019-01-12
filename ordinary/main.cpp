@@ -22,15 +22,16 @@ int main(int argc, char **argv)
 	int height = gray.rows;
 	unsigned char *source = new unsigned char[height * width];
 	unsigned char *destination = new unsigned char[height * width];
-	int kernelWidth = 3;
-	int kernelHeight = 3;
+	int kernelWidth = 101;
+	int kernelHeight = 101;
 	double sigma = 1.0;
 
 	for(int i = 0; i < height; i++)
 	{
 		for(int j = 0; j < width; j++)
 		{
-			source[(i * width) + j] = gray.at<unsigned char>(i, j);
+			source[(i * width) + j] = gray.at<uchar>(i, j);
+			destination[(i * width) + j] = source[(i * width) + j];
 		}
 	}
 
