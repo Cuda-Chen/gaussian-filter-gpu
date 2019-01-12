@@ -15,26 +15,41 @@ int main(int argc, char **argv)
 	cvtColor(img, gray, COLOR_BGR2GRAY);
 	cout << gray.type() << endl;
 
-	imshow("gray", gray);
-	waitKey();
+	//imshow("gray", gray);
+	//waitKey();
 
-	int width = 3;
-	int height = 3;
+	int width = gray.cols;
+	int height = gray.rows;
+	unsigned char *source = new unsigned char[height * width];
+	unsigned char *destination = new unsigned char[height * width];
+	int kernelWidth = 3;
+	int kernelHeight = 3;
 	double sigma = 1.0;
-	double *kernel = new double[width * height];
-	generateKernel(width, height, sigma, kernel);
 
 	for(int i = 0; i < height; i++)
 	{
 		for(int j = 0; j < width; j++)
 		{
-			cout << kernel[(i * width) + j] << " ";
+			source[(i * width) + j] = gray.at<unsigned char>(i, j);
 		}
-
-		cout << endl;
 	}
 
-	delete [] kernel;
+	gaussianFilter(source, destination, width, height, kernelWidth, kernelHeight, sigma);
+
+	Mat result(height, width, CV_8UC1, destination);
+	/*for(int i = 0; i < height; i++)
+	{
+		for(int j = 0; j < width; j++)
+		{
+			result.at<unsigned char>(i, j) = destination[(i * width) + j];
+		}
+	}*/
+
+	imshow("gaussian", result);
+	waitKey();
+
+	delete [] source;
+	delete [] destination;
 
 	return 0;
 }
