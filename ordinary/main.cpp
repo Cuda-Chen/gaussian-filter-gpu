@@ -15,17 +15,19 @@ int main(int argc, char **argv)
 	cvtColor(img, gray, COLOR_BGR2GRAY);
 	cout << gray.type() << endl;
 
-	//imshow("gray", gray);
+	imshow("gray", gray);
 	//waitKey();
 
 	int width = gray.cols;
 	int height = gray.rows;
 	unsigned char *source = new unsigned char[height * width];
 	unsigned char *destination = new unsigned char[height * width];
-	int kernelWidth = 101;
-	int kernelHeight = 101;
-	double sigma = 1.0;
+	int kernelWidth = 9;
+	int kernelHeight = 9;
+	double sigma = 2.0;
 
+	memset(source, 0x0, height * width);
+	memset(destination, 0x0, height * width);
 	for(int i = 0; i < height; i++)
 	{
 		for(int j = 0; j < width; j++)
@@ -35,6 +37,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	cout << kernelWidth / 2 << endl;
 	gaussianFilter(source, destination, width, height, kernelWidth, kernelHeight, sigma);
 
 	Mat result(height, width, CV_8UC1, destination);
@@ -46,7 +49,11 @@ int main(int argc, char **argv)
 		}
 	}*/
 
+	Mat opencvBlur;
+	GaussianBlur(gray, opencvBlur, Size(kernelWidth, kernelHeight), sigma, 0);
+
 	imshow("gaussian", result);
+	imshow("opencv gaussian", opencvBlur);
 	waitKey();
 
 	delete [] source;
