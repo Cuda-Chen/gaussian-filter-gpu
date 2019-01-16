@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 #include "opencv2/opencv.hpp"
 
@@ -13,9 +14,9 @@ int main(int argc, char **argv)
 	Mat img, gray;
 	img = imread("../image/lenna.bmp", IMREAD_COLOR);
 	cvtColor(img, gray, COLOR_BGR2GRAY);
-	cout << gray.type() << endl;
+	//cout << gray.type() << endl;
 
-	imshow("gray", gray);
+	//imshow("gray", gray);
 	//waitKey();
 
 	int width = gray.cols;
@@ -37,8 +38,11 @@ int main(int argc, char **argv)
 		}
 	}
 
-	cout << kernelWidth / 2 << endl;
+	//cout << kernelWidth / 2 << endl;
+	clock_t begin = clock();
 	gaussianFilter(source, destination, width, height, kernelWidth, kernelHeight, sigma);
+	clock_t end = clock();
+	cout << "spend " << double(end - begin) / CLOCKS_PER_SEC << "seconds" << endl;
 
 	Mat result(height, width, CV_8UC1, destination);
 	/*for(int i = 0; i < height; i++)
@@ -49,11 +53,11 @@ int main(int argc, char **argv)
 		}
 	}*/
 
-	Mat opencvBlur;
-	GaussianBlur(gray, opencvBlur, Size(kernelWidth, kernelHeight), sigma, 0);
+	//Mat opencvBlur;
+	//GaussianBlur(gray, opencvBlur, Size(kernelWidth, kernelHeight), sigma, 0);
 
 	imshow("gaussian", result);
-	imshow("opencv gaussian", opencvBlur);
+	//imshow("opencv gaussian", opencvBlur);
 	waitKey();
 
 	delete [] source;
