@@ -2,7 +2,7 @@
 
 #include "gaussian.hpp"
 
-const double PI = 3.141592653589793238463;
+const double PI = 3.14159;
 
 void generateKernel(int width, int height, double sigma, double *kernel)
 {

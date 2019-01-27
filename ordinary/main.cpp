@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	clock_t begin = clock();
 	gaussianFilter(source, destination, width, height, kernelWidth, kernelHeight, sigma);
 	clock_t end = clock();
-	cout << "spend " << double(end - begin) / CLOCKS_PER_SEC << "seconds" << endl;
+	cout << "spend " << double(end - begin) / CLOCKS_PER_SEC << " seconds" << endl;
 
 	Mat result(height, width, CV_8UC1, destination);
 	/*for(int i = 0; i < height; i++)
