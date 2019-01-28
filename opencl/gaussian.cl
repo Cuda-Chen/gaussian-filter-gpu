@@ -7,6 +7,11 @@ __kernel void gaussian(__global unsigned char *src, __global unsigned char*dst,
 	unsigned int row = get_global_id(0) + strideHeight;
 	unsigned int col = get_global_id(1) + strideWidth;
 
+	if(row < 0 || col < 0 || row > height || col > width)
+	{
+		return;
+	}
+
 	double temp = 0.0;
 	int xindex, yindex;
 
