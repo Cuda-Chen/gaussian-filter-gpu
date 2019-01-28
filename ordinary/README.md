@@ -2,7 +2,7 @@
 Implementation of Gaussian filter with CPU.
 
 # Dependencies
-* OpenCV (for reading and writing image only)
+* OpenCV (for reading, writing and thresholding image only)
 * CMake (for building)
 
 # How to Compile and Run

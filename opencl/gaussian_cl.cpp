@@ -10,7 +10,7 @@
 
 #define MAX_SOURCE_SIZE (0x100000)
 
-const double PI = 3.141592653589793238463;
+const double PI = 3.14159;
 
 void generateKernel(int width, int height, double sigma, double *kernel)
 {
@@ -46,6 +46,10 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 
 	generateKernel(kernelWidth, kernelHeight, sigma, kernel);
 
+	// OpenCL initialization
+	
+	
+	/*
 	int strideWidth = kernelWidth / 2;
 	int strideHeight = kernelHeight / 2;
 
@@ -80,5 +84,6 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 		}
 	} 
 
+	*/
 	delete [] kernel;
 }
