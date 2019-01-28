@@ -1,4 +1,4 @@
-__kernel void gaussian(__global unsigned char *src, __global unsigned char*dst,
+__kernel void gaussian(__global unsigned char *src, __global unsigned char *dst,
 	__global double *kernel, int width, int height, int kernelWidth, int kernelHeight, double sigma)
 {
 	int strideWidth = kernelWidth / 2;
