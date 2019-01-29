@@ -5,14 +5,16 @@ OBJS = gaussian_cl.cpp main.cpp
 EXEC = gaussian_cl
 
 UNAME := $(shell uname)
+OPENCV = `pkg-config opencv --cflags --libs`
+LIBS = $(OPENCV)
 
-ifeq($(UNAME), Linux)
-LIBS = -lOpenCL
+ifeq ($(UNAME), Linux)
+LIBS += -lOpenCL
 LIBS_DIR = -L/usr/local/cuda-9.0/lib64
 endif
 
-ifeq($(UNAME), Darwin)
-LIBS = -framework OpenCL
+ifeq ($(UNAME), Darwin)
+LIBS += -framework OpenCL
 endif
 
 .PHONY: all me clean

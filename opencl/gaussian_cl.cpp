@@ -1,4 +1,6 @@
 #include <cmath>
+#include <iostream>
+#include <cstdio>
 
 #ifdef __APPLE__
 	#include <OpenCL/opencl.h>
@@ -123,9 +125,9 @@ const char *getErrorString(cl_int error)
 void gaussianFilter(unsigned char *src, unsigned char *dst,
 	int width, int height, int kernelWidth, int kernelHeight, double sigma)
 {
-	double *kernel = new double[kernelWidth * kernelHeight];
+	double *gaussianKernel = new double[kernelWidth * kernelHeight];
 
-	generateKernel(kernelWidth, kernelHeight, sigma, kernel);
+	generateKernel(kernelWidth, kernelHeight, sigma, gaussianKernel);
 
 	// OpenCL initialization
 	cl_int err;
@@ -199,7 +201,7 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
                 char build_log[10000];
                 cl_int error2;
                 error2 =  clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, 10000, build_log, NULL);
-                cout << "log:" << endl << build_log << endl;
+                cerr << "log:" << endl << build_log << endl;
                 exit(1);
         }
 
@@ -247,5 +249,5 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	} 
 
 	*/
-	delete [] kernel;
+	delete [] gaussianKernel;
 }
