@@ -212,7 +212,66 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
                 cerr << getErrorString(err) << endl;
                 exit(1);
         }
-	
+
+	// stuffs will be loaded to device
+	cl_mem d_src = clCreateBuffer(context, CL_MEM_READ_ONLY, height * width * sizeof(unsigned char),
+		NULL, NULL);
+	cl_mem d_dst = clCreateBuffer(context, CL_MEM_READ_WRITE, height * width * sizeof(unsigned char),
+		NULL, NULL);
+	cl_mem d_gaussianKernel = clCreateBuffer(context, CL_MEM_READ_ONLY, kernelHeight * kernelWidth * sizeof(double),
+		NULL, NULL);
+
+	// write input data to device
+	err = clEnqueueWriteBuffer(queue, d_src, CL_TRUE, 0, height * width * sizeof(unsigned char),
+		src, 0, NULL, NULL);
+	err |= clEnqueueWriteBuffer(queue, d_gaussianKernel, CL_TRUE, 0, kernelHeight * kernelWidth * sizeof(double),
+		gaussianKernel, 0, NULL, NULL);
+	if(err != CL_SUCCESS)
+	{
+		cerr << getErrorString(err) << endl;
+		exit(1);
+	}
+
+	// set the arguments to our compute kernel
+	err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &d_src);
+	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &d_dst);
+	err |= clSetKernelArg(kernel, 2, sizeof(cl_mem), &d_gaussianKernel);
+	err |= clSetKernelArg(kernel, 3, sizeof(int), &width);
+	err |= clSetKernelArg(kernel, 4, sizeof(int), &height);
+	err |= clSetKernelArg(kernel, 5, sizeof(int), &kernelWidth);
+	err |= clSetKernelArg(kernel, 6, sizeof(int), &kernelHeight);
+	err |= clSetKernelArg(kernel, 7, sizeof(double), &sigma);
+	if(err != CL_SUCCESS)
+	{
+		cerr << getErrorString(err);
+		exit(1);
+	}
+
+	// execute our compute kernel
+	size_t global_item_size[2] = {kernelHeight, kernelWidth};
+	err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, &global_item_size, NULL,
+		0, NULL, NULL);
+	if(err != CL_SUCCESS)
+	{
+		cerr << getErrorString(err) << endl;
+		exit(1);
+	}
+
+	err = clEnqueueReadBuffer(queue, d_dst, CL_TRUE, 0, height * width * sizeof(unsigned char),
+		dst, 0, NULL, NULL);
+
+	// wait till our compute kernel is complete
+	clFinish(queue);
+
+	// release OpenCL objects
+	clReleaseMemObject(d_src);
+	clReleaseMemObject(d_dst);
+	clReleaseMemObject(d_gaussianKernel);
+	clReleaseProgram(program);
+	clReleaseKernel(kernel);
+	clReleaseCommandQueue(queue);
+	clReleaseContext(context);	
+
 	/*
 	int strideWidth = kernelWidth / 2;
 	int strideHeight = kernelHeight / 2;
@@ -249,5 +308,8 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	} 
 
 	*/
+
+	// release host objects
+	free(source_str);
 	delete [] gaussianKernel;
 }
