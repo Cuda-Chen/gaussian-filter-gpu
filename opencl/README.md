@@ -1,9 +1,10 @@
-# Gaussian Filter Ordinary Version
-Implementation of Gaussian filter with CPU.
+# Gaussian Filter OpenCL Version
+Implementation of Gaussian filter with OpenCL (mainly GPU).
 
 # Dependencies
 * OpenCV (for reading, writing and thresholding image only)
-* CMake (for building)
+* CMake (for building, optimal)
+* OpenCL (of course)
 
 # How to Compile and Run
 If you're using UNIX-like system type these commands
@@ -13,7 +14,12 @@ $ cd build
 $ cmake ..
 $ make
 $ cd ..
-$ ./gaussian_ordinary
+$ ./gaussian_cl
+```
+or type the following commands if you prefer to use makefile
+```
+$ make
+$ ./gaussian_cl
 ```
 
 # Note
