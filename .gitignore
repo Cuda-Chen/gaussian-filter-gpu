@@ -48,3 +48,6 @@ gaussian_cl
 
 # don't put build stuff
 [Bb]uild/
+
+# do not track dSYM file
+*.dSYM

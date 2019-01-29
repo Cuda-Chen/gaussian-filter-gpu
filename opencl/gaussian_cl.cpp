@@ -221,9 +221,11 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	cl_mem d_gaussianKernel = clCreateBuffer(context, CL_MEM_READ_ONLY, kernelHeight * kernelWidth * sizeof(double),
 		NULL, NULL);
 
-	// write input data to device
+	// write input/output data to device
 	err = clEnqueueWriteBuffer(queue, d_src, CL_TRUE, 0, height * width * sizeof(unsigned char),
 		src, 0, NULL, NULL);
+	err |= clEnqueueWriteBuffer(queue, d_dst, CL_TRUE, 0, height * width * sizeof(unsigned char),
+		dst, 0, NULL, NULL);
 	err |= clEnqueueWriteBuffer(queue, d_gaussianKernel, CL_TRUE, 0, kernelHeight * kernelWidth * sizeof(double),
 		gaussianKernel, 0, NULL, NULL);
 	if(err != CL_SUCCESS)
