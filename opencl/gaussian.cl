@@ -1,5 +1,11 @@
-__kernel void gaussian(__global unsigned char *src, __global unsigned char *dst, 
-	__global double *kernel, int width, int height, int kernelWidth, int kernelHeight, double sigma)
+__kernel void gaussian(__global unsigned char *src, 
+	__global unsigned char *dst, 
+	__global double *gaussianKernel, 
+	int width, 
+	int height, 
+	int kernelWidth, 
+	int kernelHeight, 
+	double sigma)
 {
 	int strideWidth = kernelWidth / 2;
 	int strideHeight = kernelHeight / 2;
@@ -21,7 +27,7 @@ __kernel void gaussian(__global unsigned char *src, __global unsigned char *dst,
 		{
 			xindex = krow + row - strideHeight;
 			yindex = kcol + col - strideWidth;
-			temp += src[(xindex * width) + yindex] * kernel[(krow * kernelWidth) + kcol];
+			temp += src[(xindex * width) + yindex] * gaussianKernel[(krow * kernelWidth) + kcol];
 		}
 	}
 

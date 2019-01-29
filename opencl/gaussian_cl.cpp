@@ -248,8 +248,8 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	}
 
 	// execute our compute kernel
-	size_t global_item_size[2] = {kernelHeight, kernelWidth};
-	err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, &global_item_size, NULL,
+	size_t global_item_size[2] = {(size_t)kernelHeight, (size_t)kernelWidth};
+	err = clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_item_size, NULL,
 		0, NULL, NULL);
 	if(err != CL_SUCCESS)
 	{
