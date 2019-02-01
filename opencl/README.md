@@ -1,5 +1,5 @@
 # Gaussian Filter OpenCL Version
-Implementation of Gaussian filter with OpenCL (mainly GPU).
+Naive implementation of Gaussian filter with OpenCL (mainly GPU).
 
 # Dependencies
 * OpenCV (for reading, writing and thresholding image only)
