@@ -43,6 +43,7 @@
 *.app
 gaussian_ordinary
 gaussian_cl
+gaussian_cuda
 
 # End of https://www.gitignore.io/api/c++
 
