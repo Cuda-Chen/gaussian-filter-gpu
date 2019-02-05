@@ -84,6 +84,7 @@ __global__ void gaussian(unsigned char *src, unsigned char *dst,
 			temp += src[(xindex * width) + yindex] * gaussianKernel[(krow * kernelWidth) + kcol];
 		}
 	}
+	__syncthreads();
 
 	if(temp > 255)
 	{
@@ -121,46 +122,11 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	checkError(cudaMemcpy(d_kernel, kernel,
 		kernelHeight * kernelWidth * sizeof(double), cudaMemcpyHostToDevice));
 
-	gaussian<<<gridSize, blockSize>>>(d_src, d_dst, d_kernel, width,
+	gaussian<<<1, 1>>>(d_src, d_dst, d_kernel, width,
 		height, kernelWidth, kernelHeight, sigma);
 
 	checkError(cudaMemcpy(dst, d_dst,
-		kernelHeight * kernelWidth * sizeof(unsigned char), cudaMemcpyDeviceToHost));
-
-	/*
-	int strideWidth = kernelWidth / 2;
-	int strideHeight = kernelHeight / 2;
-
-	for(int row = 0 + strideHeight; row < height - strideHeight; row++)
-	{
-		for(int col = 0 + strideWidth; col < width - strideWidth; col++)
-		{
-			double temp = 0.0;
-			int xindex;
-			int yindex;
-			
-			for(int krow = 0; krow < kernelHeight; krow++)
-			{
-				for(int kcol = 0; kcol < kernelWidth; kcol++)
-				{
-					xindex = krow + row - strideHeight;
-					yindex = kcol + col - strideWidth;
-					temp += src[(xindex * width) + yindex] * kernel[(krow * kernelWidth) + kcol];
-				}
-			}
-
-			if(temp > 255)
-			{
-				temp = 255;
-			}
-			else if(temp < 0)
-			{
-				temp = 0;
-			}
-
-			dst[(row * width) + col] = (unsigned char)temp;
-		}
-	} */
+		height * width * sizeof(unsigned char), cudaMemcpyDeviceToHost));
 
 	// release CUDA objects
 	cudaFree(d_src);
