@@ -1,7 +1,7 @@
 CPP = g++
 CPPFLAGS = -g -std=c++11
 DEPS = gaussian_cl.hpp
-OBJS = gaussian_cl.cpp main.cpp
+OBJS = gaussian_cl.o main.o
 EXEC = gaussian_cl
 
 UNAME := $(shell uname)
