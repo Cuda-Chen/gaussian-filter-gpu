@@ -63,11 +63,46 @@ __global__ void gaussian(unsigned char *src, unsigned char *dst,
 	int strideWidth = kernelWidth / 2;
 	int strideHeight = kernelHeight / 2;
 
+	for(int row = (blockIdx.x * blockDim.x + threadIdx.x) + strideHeight;
+		row < height - strideHeight;
+		row += blockDim.x * gridDim.x)
+	{
+		for(int col = (blockIdx.y * blockDim.y + threadIdx.y) + strideWidth;
+			col < width - strideWidth;
+			col += blockDim.y * gridDim.y)
+		{
+			double temp = 0.0;
+			int xindex, yindex;
+
+			for(int krow = 0; krow < kernelHeight; krow++)
+			{
+				for(int kcol = 0; kcol < kernelWidth; kcol++)
+				{
+					xindex = krow + row - strideHeight;
+					yindex = kcol + col - strideWidth;
+					temp += src[(xindex * width) + yindex] * 
+						gaussianKernel[(krow * kernelWidth) + kcol];
+				}
+			}
+
+			if(temp > 255)
+			{
+				temp = 255;
+			}
+			else if(temp < 0)
+			{
+				temp = 0;
+			}
+
+			dst[(row * width) + col] = (unsigned char)temp;
+		}
+	}
+/*
 	int row = blockIdx.x * blockDim.x + threadIdx.x + strideHeight;
-	int col = blockIdx.y * blockDim.y + threadIdx.y + strideWidth;
+	int col = blockIdx.y * blockDim.y + threadIdx.y + strideWidth;*/
 
 	// boundary check
-	if(row < 0 || col < 0 || row > height || col > width)
+/*	if(row < 0 || col < 0 || row > height || col > width)
 	{
 		return;
 	}
@@ -95,7 +130,7 @@ __global__ void gaussian(unsigned char *src, unsigned char *dst,
 		temp = 0;
 	}
 
-	dst[(row * width) + col] = (unsigned char)temp;
+	dst[(row * width) + col] = (unsigned char)temp;*/
 }
 
 void gaussianFilter(unsigned char *src, unsigned char *dst,
@@ -122,7 +157,7 @@ void gaussianFilter(unsigned char *src, unsigned char *dst,
 	checkError(cudaMemcpy(d_kernel, kernel,
 		kernelHeight * kernelWidth * sizeof(double), cudaMemcpyHostToDevice));
 
-	gaussian<<<1, 1>>>(d_src, d_dst, d_kernel, width,
+	gaussian<<<gridSize, blockSize>>>(d_src, d_dst, d_kernel, width,
 		height, kernelWidth, kernelHeight, sigma);
 
 	checkError(cudaMemcpy(dst, d_dst,

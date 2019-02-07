@@ -28,13 +28,13 @@ int main(int argc, char **argv)
 	double sigma = 3.0;
 
 	//memset(source, 0x0, height * width);
-	memset(destination, 0x0, height * width);
+	//memset(destination, 0x0, height * width);
 	for(int i = 0; i < height; i++)
 	{
 		for(int j = 0; j < width; j++)
 		{
 			source[(i * width) + j] = gray.at<uchar>(i, j);
-			//destination[(i * width) + j] = source[(i * width) + j];
+			destination[(i * width) + j] = source[(i * width) + j];
 		}
 	}
 
